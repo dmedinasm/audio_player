@@ -18,6 +18,9 @@ const songList = [
     }
 ]
 
+//Canción actual
+let actualSong = null
+
 //Capturar elementos del DOM para trabajar con JS
 const songs = document.getElementById("songs")
 const audio = document.getElementById("audio")
@@ -36,7 +39,9 @@ function loadSongs(){
         link.textContent = song.title
         link.href="#"
         //Escuchar clicks
-        link.addEventListener('click', () => loadSong(index))
+        link.addEventListener('click', () => {
+            loadSong(index)
+        })
         //Añadir a li
         li.appendChild(link)
         //Añadir li a ul
@@ -46,11 +51,26 @@ function loadSongs(){
 
 //Cargar canción seleccionada
 function loadSong(songIndex){
-    audio.src = `audio/${songList[songIndex].file}`
-    audio.play()
-   changeCover(songIndex)
-   changeSongTitle(songIndex)
-   
+    if(songIndex !== actualSong){
+        changeActiveClass(actualSong, songIndex)
+        actualSong = songIndex
+        console.log(actualSong)
+        audio.src = `audio/${songList[songIndex].file}`
+        audio.play()
+       changeCover(songIndex)
+       changeSongTitle(songIndex) 
+       
+    }
+}
+
+//Cambiar clase activa(No es la solucion mas elegante ver otra posibilidad)
+function changeActiveClass(lastIndex, newIndex){
+    const links = document.querySelectorAll("a")  
+    if (actualSong !== null){
+        links[lastIndex].classList.remove("active")    
+    }
+
+    links[newIndex].classList.add("active") 
 }
 
 //Cambiar el cover de la cancion
