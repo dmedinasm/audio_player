@@ -26,7 +26,15 @@ const songs = document.getElementById("songs")
 const audio = document.getElementById("audio")
 const cover = document.getElementById("cover")
 const title = document.getElementById("title")
+const play =  document.getElementById("play")
+const prev = document.getElementById("prev")
+const next = document.getElementById("next")
 
+//Escuchar clicks en los controles
+play.addEventListener("click", () => audio.paused ? playSong() : pauseSong())
+
+prev.addEventListener("click", () => prevSong())
+next.addEventListener("click", () => nextSong())
 
 //Cargar canciones y mostrar el listado
 function loadSongs(){
@@ -56,11 +64,37 @@ function loadSong(songIndex){
         actualSong = songIndex
         console.log(actualSong)
         audio.src = `audio/${songList[songIndex].file}`
-        audio.play()
+        playSong()
        changeCover(songIndex)
        changeSongTitle(songIndex) 
        
     }
+}
+
+//Actualizar controles
+function updateControls(){
+    if(audio.paused){
+        play.classList.remove("fa-pause")
+        play.classList.add("fa-play")
+    }else{
+        play.classList.add("fa-pause")
+        play.classList.remove("fa-play")
+    }
+}
+
+//Reproducir cancion
+function playSong(){
+    if(actualSong !== null){
+     audio.play()
+    updateControls()
+    }
+    
+}
+
+//Pausar cancion
+function pauseSong(){
+    audio.pause()
+    updateControls()
 }
 
 //Cambiar clase activa(No es la solucion mas elegante ver otra posibilidad)
@@ -81,6 +115,26 @@ function changeCover(songIndex){
 //Cambiar el título de la canción
 function changeSongTitle(songIndex){
     title.textContent = `${songList[songIndex].title}`
+}
+
+//Anterior cancion
+function prevSong(){
+    if(actualSong > 0){
+        loadSong(actualSong - 1)
+    }else{
+        loadSong(songList.length - 1)
+    }
+    
+}
+
+//Siguiente cancion
+function nextSong(){
+    if(actualSong < songList.length - 1){
+        loadSong(actualSong + 1)
+    }else{
+        loadSong(0)
+    }
+   
 }
 
 //Go!
