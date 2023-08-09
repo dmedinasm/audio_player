@@ -29,6 +29,12 @@ const title = document.getElementById("title")
 const play =  document.getElementById("play")
 const prev = document.getElementById("prev")
 const next = document.getElementById("next")
+const progress = document.getElementById("progress")
+const progressContainer = document.getElementById("progress-container")
+progressContainer.addEventListener("click", setProgress)
+
+//Escuchar el elemento audio
+audio.addEventListener("timeupdate", updateProgress)//Evento que sigue el currentTime del audio a cada momento
 
 //Escuchar clicks en los controles
 play.addEventListener("click", () => audio.paused ? playSong() : pauseSong())
@@ -55,6 +61,21 @@ function loadSongs(){
         //Añadir li a ul
         songs.appendChild(li)
     })
+}
+
+//Actualizar barra de progreso de la cancion
+function updateProgress(event){
+    const {duration, currentTime} = event.srcElement
+    const percent = (currentTime/duration) * 100
+    progress.style.width = `${percent}%`
+}
+
+//Hacerla barra de progreso clicable
+function setProgress(event){
+    const totalWidth = this.offsetWidth
+    const progressWidth = event.offsetX
+    const current = (progressWidth / totalWidth) * audio.duration
+    audio.currentTime = current//current dependera de donde doy click en la barra y por ende este sera el currentTime
 }
 
 //Cargar canción seleccionada
@@ -136,6 +157,9 @@ function nextSong(){
     }
    
 }
+
+// Lanzar siguente cancion cuando se acaba la actual
+audio.addEventListener("ended", nextSong)
 
 //Go!
 loadSongs()

@@ -46,8 +46,9 @@ body{
 
  .progress{
     background-color: goldenrod;
-    width: 40%;/*El porciento es respecto al contenedor padre*/
+    width: 0;/*El porciento es respecto al contenedor padre*/
     height: 100%;/* Se ajusta al contenedor progresscontainer*/
+    cursor: pointer;
  }
 /*Controls*/
 .controls{
@@ -58,6 +59,7 @@ body{
 .controls button{
     background-color: transparent;
     border: none;
+    cursor: pointer;
 }
 
 .controls i{
